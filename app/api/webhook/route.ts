@@ -57,7 +57,7 @@ export async function POST(req: Request) {
   if (eventType === "user.created") {
     const { id, email_addresses, username, first_name, last_name, image_url } =
       evt.data;
-    const mongoUser = createUser({
+    const mongoUser = await createUser({
       clerkId: id,
       name: `${first_name} ${last_name || ""}`,
       email: email_addresses[0].email_address,
@@ -81,7 +81,7 @@ export async function POST(req: Request) {
   if (eventType === "user.updated") {
     const { id, email_addresses, username, first_name, last_name, image_url } =
       evt.data;
-    const mongoUser = updateUser({
+    const mongoUser = await updateUser({
       clerkId: id,
       updateData: {
         name: `${first_name} ${last_name || ""}`,
@@ -108,7 +108,7 @@ export async function POST(req: Request) {
 
   if (eventType === "user.deleted") {
     const { id } = evt.data;
-    const deletedUser = deleteUser({ clerkId: id! });
+    const deletedUser = await deleteUser({ clerkId: id! });
     return NextResponse.json({ message: "User is deleted", deletedUser });
   }
 
