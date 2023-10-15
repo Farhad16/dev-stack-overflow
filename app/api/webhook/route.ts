@@ -65,7 +65,7 @@ export async function POST(req: Request) {
       picture: image_url,
     });
 
-    const userdata = {
+    const responseData = {
       id,
       email_addresses,
       username,
@@ -74,7 +74,8 @@ export async function POST(req: Request) {
       image_url,
       mongoUser,
     };
-    return NextResponse.json({ message: "Ok", userdata });
+
+    return NextResponse.json({ message: "Ok", responseData });
   }
 
   if (eventType === "user.updated") {
@@ -91,7 +92,18 @@ export async function POST(req: Request) {
       path: `/profile/${id}`,
     });
 
-    return NextResponse.json({ message: "Ok", mongoUser });
+    const responseData = {
+      id,
+      email_addresses,
+      username,
+      first_name,
+      last_name,
+      image_url,
+      mongoUser,
+    };
+
+    return NextResponse.json({ message: "Ok", responseData });
+    // return NextResponse.json({ message: "Ok", mongoUser });
   }
 
   if (eventType === "user.deleted") {
