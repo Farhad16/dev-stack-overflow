@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 "use server";
 
 import User from "@/database/user.model";
@@ -61,10 +62,10 @@ export async function deleteUser(param: DeleteUserParams) {
     // Delete user from database
     // and questions, answers, comments etc
 
-    //get user question's ids
-    const userQuestionIds = await Question.find({ author: user._id }).distinct(
-      "_id"
-    );
+    // get user question's ids
+    // const userQuestionIds = await Question.find({ author: user._id }).distinct(
+    //   "_id"
+    // );
 
     // delete user questions
     await Question.deleteMany({ author: user._id });

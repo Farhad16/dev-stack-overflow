@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 "use server";
 
 import Question from "@/database/question.model";
@@ -26,7 +27,7 @@ export async function createQuestion(params: CreateQuestionParams) {
     connectToDatabase();
 
     const { title, content, tags, author, path } = params;
-    //create the question
+    // create the question
     const question = await Question.create({
       title,
       content,
