@@ -65,17 +65,7 @@ export async function POST(req: Request) {
       picture: image_url,
     });
 
-    const responseData = {
-      id,
-      email_addresses,
-      username,
-      first_name,
-      last_name,
-      image_url,
-      mongoUser,
-    };
-
-    return NextResponse.json({ message: "Ok", responseData });
+    return NextResponse.json({ message: "User is created", mongoUser });
   }
 
   if (eventType === "user.updated") {
@@ -92,18 +82,7 @@ export async function POST(req: Request) {
       path: `/profile/${id}`,
     });
 
-    const responseData = {
-      id,
-      email_addresses,
-      username,
-      first_name,
-      last_name,
-      image_url,
-      mongoUser,
-    };
-
-    return NextResponse.json({ message: "Ok", responseData });
-    // return NextResponse.json({ message: "Ok", mongoUser });
+    return NextResponse.json({ message: "User is updated", mongoUser });
   }
 
   if (eventType === "user.deleted") {
