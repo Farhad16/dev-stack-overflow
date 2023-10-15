@@ -64,7 +64,17 @@ export async function POST(req: Request) {
       username: username!,
       picture: image_url,
     });
-    return NextResponse.json({ message: "Ok", mongoUser });
+
+    const userdata = {
+      id,
+      email_addresses,
+      username,
+      first_name,
+      last_name,
+      image_url,
+      mongoUser,
+    };
+    return NextResponse.json({ message: "Ok", userdata });
   }
 
   if (eventType === "user.updated") {
@@ -80,6 +90,7 @@ export async function POST(req: Request) {
       },
       path: `/profile/${id}`,
     });
+
     return NextResponse.json({ message: "Ok", mongoUser });
   }
 
