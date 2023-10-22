@@ -5,6 +5,8 @@ import React from "react";
 import Matric from "@/components/shared/Matric";
 import { getTimestamp, formatAndDivideNumber } from "@/lib/utils";
 import ParseHTML from "@/components/shared/ParseHTML";
+import RenderTag from "@/components/shared/RenderTag";
+import Answer from "@/components/forms/Answer";
 
 const Page = async ({
   params,
@@ -63,6 +65,18 @@ const Page = async ({
         />
       </div>
       <ParseHTML data={result.content} />
+
+      <div className="mt-8 flex flex-wrap gap-2">
+        {result.tags.map((tag: any) => (
+          <RenderTag
+            key={tag._id}
+            _id={tag._id}
+            name={tag.name}
+            showCount={false}
+          />
+        ))}
+      </div>
+      <Answer />
     </>
   );
 };
