@@ -1,20 +1,24 @@
+import Answer from "@/components/forms/Answer";
+import Metric from "@/components/shared/Matric";
+import ParseHTML from "@/components/shared/ParseHTML";
+import RenderTag from "@/components/shared/RenderTag";
 import { getQuestionById } from "@/lib/actions/question.action";
+import { getUserById } from "@/lib/actions/user.action";
+import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
+import { auth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import Matric from "@/components/shared/Matric";
-import { getTimestamp, formatAndDivideNumber } from "@/lib/utils";
-import ParseHTML from "@/components/shared/ParseHTML";
-import RenderTag from "@/components/shared/RenderTag";
-import Answer from "@/components/forms/Answer";
 
-const Page = async ({
-  params,
-  searchParams,
-}: {
-  params: any;
-  searchParams: string;
-}) => {
+const Page = async ({ params, searchParams }: any) => {
+  const { userId: clerkId } = auth();
+
+  let mongoUser;
+
+  if (clerkId) {
+    mongoUser = await getUserById({ userId: clerkId });
+  }
+
   const result = await getQuestionById({ questionId: params.id });
 
   return (
@@ -27,43 +31,46 @@ const Page = async ({
           >
             <Image
               src={result.author.picture}
-              alt="user"
-              width={12}
-              height={12}
+              className="rounded-full"
+              width={22}
+              height={22}
+              alt="profile"
             />
             <p className="paragraph-semibold text-dark300_light700">
               {result.author.name}
             </p>
           </Link>
-          <div className="flex justify-center">voting</div>
+          votes
         </div>
         <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full text-left">
           {result.title}
         </h2>
       </div>
+
       <div className="mb-8 mt-5 flex flex-wrap gap-4">
-        <Matric
+        <Metric
           imgUrl="/assets/icons/clock.svg"
           alt="clock icon"
           value={` asked ${getTimestamp(result.createdAt)}`}
           title=" Asked"
           textStyles="small-medium text-dark400_light800"
         />
-        <Matric
+        <Metric
           imgUrl="/assets/icons/message.svg"
           alt="message"
-          value={result.answers.length}
+          value={formatAndDivideNumber(result.answers.length)}
           title=" Answers"
           textStyles="small-medium text-dark400_light800"
         />
-        <Matric
+        <Metric
           imgUrl="/assets/icons/eye.svg"
-          alt="eys"
+          alt="eye"
           value={formatAndDivideNumber(result.views)}
           title=" Views"
           textStyles="small-medium text-dark400_light800"
         />
       </div>
+
       <ParseHTML data={result.content} />
 
       <div className="mt-8 flex flex-wrap gap-2">
@@ -76,7 +83,12 @@ const Page = async ({
           />
         ))}
       </div>
-      <Answer />
+
+      <Answer
+        question={result.content}
+        questionId={JSON.stringify(result._id)}
+        authorId={JSON.stringify(mongoUser._id)}
+      />
     </>
   );
 };
