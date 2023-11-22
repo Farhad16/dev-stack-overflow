@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import RenderTag from "../shared/RenderTag";
-import Matric from "../shared/Matric";
+import Metric from "../shared/Metric";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 interface QusetionProps {
   _id: string;
@@ -51,29 +51,29 @@ const QuestionCard = ({
         ))}
       </div>
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
-        <Matric
-          imgUrl="/assets/icons/avatar.svg"
+        <Metric
+          imgUrl={author.picture}
           alt="user"
           value={author.name}
           title={` - asked ${getTimestamp(createdAt)}`}
           href={`/profile/${author._id}`}
           textStyles="body-medium text-dark400_light700"
         />
-        <Matric
+        <Metric
           imgUrl="/assets/icons/like.svg"
           alt="upvotes"
           value={formatAndDivideNumber(upvotes)}
           title=" Votes"
           textStyles="small-medium text-dark400_light800"
         />
-        <Matric
+        <Metric
           imgUrl="/assets/icons/message.svg"
           alt="message"
           value={answers.length}
           title=" Answers"
           textStyles="small-medium text-dark400_light800"
         />
-        <Matric
+        <Metric
           imgUrl="/assets/icons/eye.svg"
           alt="eys"
           value={formatAndDivideNumber(views)}
