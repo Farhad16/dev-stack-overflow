@@ -1,13 +1,19 @@
 import QuestionCard from "@/components/cards/QuestionCard";
-import HomeFilters from "@/components/home/HomeFilters";
 import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
 import LocalSearch from "@/components/shared/search/LocalSearch";
-import { HomePageFilters } from "@/constants/filter";
-import { getQuestions } from "@/lib/actions/question.action";
+import { QuestionFilters } from "@/constants/filter";
+import { getSavedQuestions } from "@/lib/actions/user.action";
+import { auth } from "@clerk/nextjs";
 
 export default async function Home() {
-  const { questions } = await getQuestions({});
+  const { userId } = auth();
+
+  if (!userId) {
+    return null;
+  }
+
+  const { questions } = await getSavedQuestions({ clerkId: userId });
 
   return (
     <>
@@ -22,15 +28,13 @@ export default async function Home() {
           otherClasses="flex-1"
         />
         <Filter
-          filters={HomePageFilters}
+          filters={QuestionFilters}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
-          containerClasses="hidden max-md:flex"
         />
       </div>
-      <HomeFilters />
       <div className="mt-10 flex w-full flex-col gap-6">
         {questions.length ? (
-          questions.map((question) => (
+          questions.map((question: any) => (
             <QuestionCard
               key={question._id}
               _id={question._id}
@@ -45,7 +49,7 @@ export default async function Home() {
           ))
         ) : (
           <NoResult
-            title="There's no question to show"
+            title="There's no saved question to show"
             description="Be the first to break the silence! 🚀 Ask a Question and kickstart the discussion. our query could be the next big thing others learn from. Get involved! 💡"
             link="/ask-question"
             linkTitle="Ask a Question"
